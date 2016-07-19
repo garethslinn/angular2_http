@@ -1,4 +1,4 @@
-System.register(['angular2/http', 'rxjs/add/opeator/map', 'angular2/core'], function(exports_1, context_1) {
+System.register(['angular2/http', 'rxjs/add/operator/map', 'angular2/core'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -27,9 +27,9 @@ System.register(['angular2/http', 'rxjs/add/opeator/map', 'angular2/core'], func
                     this._http = _http;
                     this._url = "https://jsonplaceholder.typicode.com/posts";
                 }
-                PostService.prototype.getPost = function () {
+                PostService.prototype.getPosts = function () {
                     return this._http.get(this._url)
-                        .map(function (red) { return res.json(); });
+                        .map(function (res) { return res.json(); });
                 };
                 PostService.prototype.creatPost = function (post) {
                     return this._http.post(this._url, JSON.stringify(post))

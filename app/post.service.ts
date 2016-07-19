@@ -1,6 +1,9 @@
 import { Http } from 'angular2/http';
-import 'rxjs/add/opeator/map';
+import 'rxjs/add/operator/map';
 import { Injectable } from 'angular2/core';
+import { Post } from './post';
+import {Observable} from "rxjs/Rx";
+
 
 @Injectable()
 
@@ -12,12 +15,12 @@ export class PostService {
 
     }
 
-    getPost() {
+    getPosts() : Observable<Post[]> {
         return this._http.get(this._url)
-            .map(red => res.json())
+            .map(res => res.json())
     }
 
-    creatPost(post) {
+    creatPost(post: Post) {
         return this._http.post(this._url, JSON.stringify(post))
             .map(res => res.json())
     }

@@ -1,5 +1,5 @@
 /// <reference path="../typings/tsd.d.ts" />
-System.register(['angular2/core', "rxjs/Rx"], function(exports_1, context_1) {
+System.register(['angular2/core', "./post.service", 'angular2/http'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -11,38 +11,40 @@ System.register(['angular2/core', "rxjs/Rx"], function(exports_1, context_1) {
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, Rx_1;
+    var core_1, post_service_1, http_1;
     var AppComponent;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
             },
-            function (Rx_1_1) {
-                Rx_1 = Rx_1_1;
+            function (post_service_1_1) {
+                post_service_1 = post_service_1_1;
+            },
+            function (http_1_1) {
+                http_1 = http_1_1;
             }],
         execute: function() {
             AppComponent = (function () {
-                function AppComponent() {
-                    var keyups = Rx_1.Observable.fromEvent($("#search"), "keyup")
-                        .map(function (e) { return e.target.value; })
-                        .filter(function (text) { return text.length > 3; })
-                        .debounceTime(400)
-                        .distinctUntilChanged()
-                        .flatMap(function (searchTerm) {
-                        var url = "https://api.spotify.com/v1/search?type=artist&q=" + searchTerm;
-                        var promise = $.getJSON(url);
-                        return Rx_1.Observable.fromPromise(promise);
-                    });
-                    var subscription = keyups.subscribe(function (data) { return console.log(data); });
-                    //subscription.unsubscribe();
+                function AppComponent(_postService) {
+                    this._postService = _postService;
+                    this.isLoading = true;
                 }
+                AppComponent.prototype.ngOnInit = function () {
+                    var _this = this;
+                    this._postService.getPosts()
+                        .subscribe(function (posts) {
+                        _this.isLoading = false;
+                        console.log(posts[0].id);
+                    });
+                };
                 AppComponent = __decorate([
                     core_1.Component({
                         selector: 'my-app',
-                        template: "\n        <input id=\"search\" type=\"text\" class=\"form-control\">\n    "
+                        template: "\n        <div *ngIf=\"isLoading\">\n            <i class=\"fa fa-spinner fa-spin fa-3x\"></i>\n        </div>       \n    ",
+                        providers: [post_service_1.PostService, http_1.HTTP_PROVIDERS]
                     }), 
-                    __metadata('design:paramtypes', [])
+                    __metadata('design:paramtypes', [post_service_1.PostService])
                 ], AppComponent);
                 return AppComponent;
             }());
